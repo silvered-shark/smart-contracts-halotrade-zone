@@ -41,17 +41,17 @@ optimize = """docker run --rm -v "$(pwd)":/code \
 
 [dependencies]
 haloswap = { path = "../../packages/haloswap", default-features = false, version = "0.1.0"}
-cosmwasm-schema = "1.1.2"
-cosmwasm-std = "1.1.2"
-cosmwasm-storage = "1.1.2"
-cw-storage-plus = "0.15.1"
+cosmwasm-schema = "1.1.8"
+cosmwasm-std = "1.1.8"
+cosmwasm-storage = "1.1.8"
+cw-storage-plus = "1.0.0"
 cw2 = "0.16.0"
-schemars = "0.8.8"
-serde = { version = "1.0.137", default-features = false, features = ["derive"] }
-thiserror = { version = "1.0.31" }
-cw-utils = "0.16.0"
+schemars = "0.8.11"
+thiserror = { version = "1.0.37" }
+cw-utils = "1.0.0"
+getrandom = {version = "0.2.8", default-features = false, features = ["js"]}
 
 [dev-dependencies]
 cw-multi-test = "0.16.1"
-cosmwasm-schema = { version = "1.0.0" }
-cosmwasm-storage = { version = "1.0.0" }
+cosmwasm-schema = { version = "1.1.8" }
+cosmwasm-storage = { version = "1.1.8" }
