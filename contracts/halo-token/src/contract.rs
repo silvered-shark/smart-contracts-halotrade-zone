@@ -25,8 +25,11 @@ pub fn instantiate(
     // check valid token info
     msg.validate()?;
 
+    // convert initial_balances to slice of Cw20Coin
+    let initial_balances_slice = msg.initial_balances.as_slice();
+
     // create initial accounts
-    let total_supply = create_accounts(&mut deps, &msg.initial_balances)?;
+    let total_supply = create_accounts(&mut deps, &initial_balances_slice)?;
 
     if let Some(limit) = msg.get_cap() {
         if total_supply > limit {
