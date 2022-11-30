@@ -1,10 +1,11 @@
-use cosmwasm_schema::cw_serde;
+use schemars::JsonSchema;
+use serde::{Deserialize, Serialize};
 
 use cosmwasm_std::{Api, CanonicalAddr, Order, StdResult, Storage};
 use cw_storage_plus::{Bound, Item, Map};
 use haloswap::asset::{AssetInfoRaw, PairInfo, PairInfoRaw};
 
-#[cw_serde]
+#[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
 pub struct Config {
     pub owner: CanonicalAddr,
     pub pair_code_id: u64,
@@ -13,7 +14,7 @@ pub struct Config {
 
 pub const CONFIG: Item<Config> = Item::new("config");
 
-#[cw_serde]
+#[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
 pub struct TmpPairInfo {
     pub pair_key: Vec<u8>,
     pub asset_infos: [AssetInfoRaw; 2],

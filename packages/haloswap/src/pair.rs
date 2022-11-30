@@ -1,11 +1,12 @@
-use cosmwasm_schema::cw_serde;
+use schemars::JsonSchema;
+use serde::{Deserialize, Serialize};
 
 use crate::asset::{Asset, AssetInfo};
 
 use cosmwasm_std::{Decimal, Uint128};
 use cw20::Cw20ReceiveMsg;
 
-#[cw_serde]
+#[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
 pub struct InstantiateMsg {
     /// Asset infos
     pub asset_infos: [AssetInfo; 2],
@@ -14,7 +15,8 @@ pub struct InstantiateMsg {
     pub asset_decimals: [u8; 2],
 }
 
-#[cw_serde]
+#[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
+#[serde(rename_all = "snake_case")]
 pub enum ExecuteMsg {
     Receive(Cw20ReceiveMsg),
     /// ProvideLiquidity a user provides pool liquidity
@@ -32,7 +34,8 @@ pub enum ExecuteMsg {
     },
 }
 
-#[cw_serde]
+#[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
+#[serde(rename_all = "snake_case")]
 pub enum Cw20HookMsg {
     /// Sell a given amount of asset
     Swap {
@@ -43,7 +46,8 @@ pub enum Cw20HookMsg {
     WithdrawLiquidity {},
 }
 
-#[cw_serde]
+#[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
+#[serde(rename_all = "snake_case")]
 pub enum QueryMsg {
     Pair {},
     Pool {},
@@ -52,14 +56,14 @@ pub enum QueryMsg {
 }
 
 // We define a custom struct for each query response
-#[cw_serde]
+#[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
 pub struct PoolResponse {
     pub assets: [Asset; 2],
     pub total_share: Uint128,
 }
 
 /// SimulationResponse returns swap simulation response
-#[cw_serde]
+#[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
 pub struct SimulationResponse {
     pub return_amount: Uint128,
     pub spread_amount: Uint128,
@@ -67,7 +71,7 @@ pub struct SimulationResponse {
 }
 
 /// ReverseSimulationResponse returns reverse swap simulation response
-#[cw_serde]
+#[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
 pub struct ReverseSimulationResponse {
     pub offer_amount: Uint128,
     pub spread_amount: Uint128,
@@ -75,5 +79,5 @@ pub struct ReverseSimulationResponse {
 }
 
 /// We currently take no arguments for migrations
-#[cw_serde]
+#[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
 pub struct MigrateMsg {}

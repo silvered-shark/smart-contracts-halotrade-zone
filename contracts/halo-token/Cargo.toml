@@ -47,6 +47,7 @@ cosmwasm-storage = "1.1.8"
 cw-storage-plus = "1.0.0"
 cw2 = "0.16.0"
 schemars = "0.8.11"
+serde = { version = "1.0.137", default-features = false, features = ["derive"] }
 thiserror = { version = "1.0.37" }
 cw20 = {version = "0.16.0"}
 cw20-base = {version = "0.16.0", features = ["library"]}

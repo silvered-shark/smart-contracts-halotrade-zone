@@ -1,4 +1,5 @@
-use cosmwasm_schema::cw_serde;
+use schemars::JsonSchema;
+use serde::{Deserialize, Serialize};
 use std::fmt;
 
 use crate::querier::{query_balance, query_native_decimals, query_token_balance, query_token_info};
@@ -8,8 +9,7 @@ use cosmwasm_std::{
 };
 use cw20::Cw20ExecuteMsg;
 
-// #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
-#[cw_serde]
+#[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
 pub struct Asset {
     pub info: AssetInfo,
     pub amount: Uint128,
@@ -92,7 +92,8 @@ impl Asset {
 
 /// AssetInfo contract_addr is usually passed from the cw20 hook
 /// so we can trust the contract_addr is properly validated.
-#[cw_serde]
+#[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
+#[serde(rename_all = "snake_case")]
 pub enum AssetInfo {
     Token { contract_addr: String },
     NativeToken { denom: String },
@@ -175,7 +176,7 @@ impl AssetInfo {
     }
 }
 
-#[cw_serde]
+#[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
 pub struct AssetRaw {
     pub info: AssetInfoRaw,
     pub amount: Uint128,
@@ -197,7 +198,7 @@ impl AssetRaw {
     }
 }
 
-#[cw_serde]
+#[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
 pub enum AssetInfoRaw {
     Token { contract_addr: CanonicalAddr },
     NativeToken { denom: String },
@@ -245,7 +246,7 @@ impl AssetInfoRaw {
 }
 
 // We define a custom struct for each query response
-#[cw_serde]
+#[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
 pub struct PairInfo {
     pub asset_infos: [AssetInfo; 2],
     pub contract_addr: String,
@@ -253,7 +254,7 @@ pub struct PairInfo {
     pub asset_decimals: [u8; 2],
 }
 
-#[cw_serde]
+#[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
 pub struct PairInfoRaw {
     pub asset_infos: [AssetInfoRaw; 2],
     pub contract_addr: CanonicalAddr,

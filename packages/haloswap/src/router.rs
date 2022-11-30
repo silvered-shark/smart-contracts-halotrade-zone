@@ -1,16 +1,18 @@
-use cosmwasm_schema::cw_serde;
+use schemars::JsonSchema;
+use serde::{Deserialize, Serialize};
 
 use cosmwasm_std::Uint128;
 use cw20::Cw20ReceiveMsg;
 
 use crate::asset::AssetInfo;
 
-#[cw_serde]
+#[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
 pub struct InstantiateMsg {
     pub halo_factory: String,
 }
 
-#[cw_serde]
+#[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
+#[serde(rename_all = "snake_case")]
 pub enum SwapOperation {
     HaloSwap {
         offer_asset_info: AssetInfo,
@@ -26,7 +28,8 @@ impl SwapOperation {
     }
 }
 
-#[cw_serde]
+#[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
+#[serde(rename_all = "snake_case")]
 pub enum ExecuteMsg {
     Receive(Cw20ReceiveMsg),
     /// Execute multiple BuyOperation
@@ -52,7 +55,8 @@ pub enum ExecuteMsg {
     },
 }
 
-#[cw_serde]
+#[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
+#[serde(rename_all = "snake_case")]
 pub enum Cw20HookMsg {
     ExecuteSwapOperations {
         operations: Vec<SwapOperation>,
@@ -61,7 +65,8 @@ pub enum Cw20HookMsg {
     },
 }
 
-#[cw_serde]
+#[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
+#[serde(rename_all = "snake_case")]
 pub enum QueryMsg {
     Config {},
     SimulateSwapOperations {
@@ -75,17 +80,17 @@ pub enum QueryMsg {
 }
 
 // We define a custom struct for each query response
-#[cw_serde]
+#[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
 pub struct ConfigResponse {
     pub halo_factory: String,
 }
 
 // We define a custom struct for each query response
-#[cw_serde]
+#[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
 pub struct SimulateSwapOperationsResponse {
     pub amount: Uint128,
 }
 
 /// We currently take no arguments for migrations
-#[cw_serde]
+#[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
 pub struct MigrateMsg {}

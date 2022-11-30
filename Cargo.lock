@@ -526,6 +526,7 @@ dependencies = [
  "getrandom",
  "haloswap",
  "schemars",
+ "serde",
  "thiserror",
 ]
 
@@ -546,6 +547,7 @@ dependencies = [
  "haloswap",
  "integer-sqrt",
  "schemars",
+ "serde",
  "thiserror",
 ]
 
@@ -563,6 +565,7 @@ dependencies = [
  "getrandom",
  "haloswap",
  "schemars",
+ "serde",
  "thiserror",
 ]
 
@@ -581,6 +584,7 @@ dependencies = [
  "getrandom",
  "haloswap",
  "schemars",
+ "serde",
  "thiserror",
 ]
 
@@ -592,6 +596,8 @@ dependencies = [
  "cosmwasm-std",
  "cosmwasm-storage",
  "cw20",
+ "schemars",
+ "serde",
 ]
 
 [[package]]
