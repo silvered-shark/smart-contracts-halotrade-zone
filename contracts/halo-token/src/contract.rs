@@ -29,7 +29,7 @@ pub fn instantiate(
     let initial_balances_slice = msg.initial_balances.as_slice();
 
     // create initial accounts
-    let total_supply = create_accounts(&mut deps, &initial_balances_slice)?;
+    let total_supply = create_accounts(&mut deps, initial_balances_slice)?;
 
     if let Some(limit) = msg.get_cap() {
         if total_supply > limit {

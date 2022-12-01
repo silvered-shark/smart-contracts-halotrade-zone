@@ -294,7 +294,7 @@ checksum = "d6a84c6c1c0acc3616398eba50783934bd6c964bad6974241eaee3460c8f5b26"
 dependencies = [
  "cosmwasm-schema",
  "cosmwasm-std",
- "cw2",
+ "cw2 0.16.0",
  "schemars",
  "semver",
  "serde",
@@ -310,7 +310,7 @@ dependencies = [
  "anyhow",
  "cosmwasm-schema",
  "cosmwasm-std",
- "cw2",
+ "cw2 0.16.0",
  "k256",
  "schemars",
  "semver",
@@ -332,10 +332,23 @@ dependencies = [
 ]
 
 [[package]]
-name = "cw20"
-version = "0.16.0"
+name = "cw2"
+version = "1.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "a45a8794a5dd33b66af34caee52a7beceb690856adcc1682b6e3db88b2cdee62"
+checksum = "03bdf3747540b47bc1bdaf50ba3aa5e4276ab0c2ce73e8b367ebe260cc37ff9c"
+dependencies = [
+ "cosmwasm-schema",
+ "cosmwasm-std",
+ "cw-storage-plus 0.16.0",
+ "schemars",
+ "serde",
+]
+
+[[package]]
+name = "cw20"
+version = "1.0.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "a7a4d69a9980e2295077c08fd3f797149658f357167f5898e27c00b9465fcbde"
 dependencies = [
  "cosmwasm-schema",
  "cosmwasm-std",
@@ -346,15 +359,15 @@ dependencies = [
 
 [[package]]
 name = "cw20-base"
-version = "0.16.0"
+version = "1.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "61d826fa1084d026d0abdb54faa5956972efa3a9053473bfcefb5388960aab69"
+checksum = "f79314264ffc46b7658ee30caccc1540f14b9119568264bc02817f79c6f989a9"
 dependencies = [
  "cosmwasm-schema",
  "cosmwasm-std",
  "cw-storage-plus 0.16.0",
  "cw-utils 0.16.0",
- "cw2",
+ "cw2 1.0.0",
  "cw20",
  "schemars",
  "semver",
@@ -522,7 +535,7 @@ dependencies = [
  "cw-multi-test",
  "cw-storage-plus 1.0.0",
  "cw-utils 1.0.0",
- "cw2",
+ "cw2 1.0.0",
  "getrandom",
  "haloswap",
  "schemars",
@@ -541,7 +554,7 @@ dependencies = [
  "cw-multi-test",
  "cw-storage-plus 1.0.0",
  "cw-utils 1.0.0",
- "cw2",
+ "cw2 1.0.0",
  "cw20",
  "getrandom",
  "haloswap",
@@ -560,7 +573,7 @@ dependencies = [
  "cosmwasm-storage",
  "cw-multi-test",
  "cw-storage-plus 1.0.0",
- "cw2",
+ "cw2 1.0.0",
  "cw20",
  "getrandom",
  "haloswap",
@@ -578,7 +591,7 @@ dependencies = [
  "cosmwasm-storage",
  "cw-multi-test",
  "cw-storage-plus 1.0.0",
- "cw2",
+ "cw2 1.0.0",
  "cw20",
  "cw20-base",
  "getrandom",
@@ -597,7 +610,6 @@ dependencies = [
  "cosmwasm-storage",
  "cw20",
  "schemars",
- "serde",
 ]
 
 [[package]]

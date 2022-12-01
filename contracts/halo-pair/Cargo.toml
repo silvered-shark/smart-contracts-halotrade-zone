@@ -48,11 +48,11 @@ cosmwasm-std = "1.1.8"
 cosmwasm-storage = "1.1.8"
 integer-sqrt = "0.1.5"
 cw-storage-plus = "1.0.0"
-cw2 = "0.16.0"
+cw2 = "1.0.0"
 schemars = "0.8.11"
 serde = { version = "1.0.137", default-features = false, features = ["derive"] }
 thiserror = { version = "1.0.37" }
-cw20 = { version = "0.16.0" }
+cw20 = { version = "1.0.0" }
 cw-utils = "1.0.0"
 getrandom = {version = "0.2.8", default-features = false, features = ["js"]}
 
