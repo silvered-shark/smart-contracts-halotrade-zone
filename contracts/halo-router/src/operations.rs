@@ -7,7 +7,7 @@ use crate::state::{Config, CONFIG};
 
 use cw20::Cw20ExecuteMsg;
 use haloswap::asset::{Asset, AssetInfo, PairInfo};
-use haloswap::pair::ExecuteMsg as PairExecuteMsg;
+use haloswap::pair::Cw20HookMsg as PairHookMsg;
 use haloswap::querier::{query_balance, query_pair_info, query_token_balance};
 use haloswap::router::SwapOperation;
 
@@ -79,8 +79,7 @@ pub fn asset_into_swap_msg(
                 denom,
                 amount: offer_asset.amount,
             }],
-            msg: to_binary(&PairExecuteMsg::Swap {
-                offer_asset,
+            msg: to_binary(&PairHookMsg::Swap {
                 belief_price: None,
                 max_spread,
                 to,
@@ -92,8 +91,7 @@ pub fn asset_into_swap_msg(
             msg: to_binary(&Cw20ExecuteMsg::Send {
                 contract: pair_contract.to_string(),
                 amount: offer_asset.amount,
-                msg: to_binary(&PairExecuteMsg::Swap {
-                    offer_asset,
+                msg: to_binary(&PairHookMsg::Swap {
                     belief_price: None,
                     max_spread,
                     to,

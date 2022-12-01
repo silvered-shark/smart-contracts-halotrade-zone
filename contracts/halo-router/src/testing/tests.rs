@@ -9,7 +9,7 @@ use haloswap::mock_querier::mock_dependencies;
 
 use cw20::{Cw20ExecuteMsg, Cw20ReceiveMsg};
 use haloswap::asset::{Asset, AssetInfo, PairInfo};
-use haloswap::pair::ExecuteMsg as PairExecuteMsg;
+use haloswap::pair::Cw20HookMsg as PairHookMsg;
 use haloswap::router::{
     ConfigResponse, Cw20HookMsg, ExecuteMsg, InstantiateMsg, QueryMsg,
     SimulateSwapOperationsResponse, SwapOperation,
@@ -415,13 +415,7 @@ fn execute_swap_operation() {
             msg: to_binary(&Cw20ExecuteMsg::Send {
                 contract: "pair0000".to_string(),
                 amount: Uint128::from(1000000u128),
-                msg: to_binary(&PairExecuteMsg::Swap {
-                    offer_asset: Asset {
-                        info: AssetInfo::Token {
-                            contract_addr: "asset".to_string(),
-                        },
-                        amount: Uint128::from(1000000u128),
-                    },
+                msg: to_binary(&PairHookMsg::Swap {
                     belief_price: None,
                     max_spread: None,
                     to: Some("addr0000".to_string()),
@@ -633,13 +627,7 @@ fn query_reverse_routes_with_from_native() {
         vec![SubMsg::new(CosmosMsg::Wasm(WasmMsg::Execute {
             contract_addr: "pair0000".to_string(),
             funds: vec![coin(target_amount, "ukrw")],
-            msg: to_binary(&PairExecuteMsg::Swap {
-                offer_asset: Asset {
-                    info: AssetInfo::NativeToken {
-                        denom: "ukrw".to_string(),
-                    },
-                    amount: Uint128::from(target_amount),
-                },
+            msg: to_binary(&PairHookMsg::Swap {
                 belief_price: None,
                 max_spread: None,
                 to: None,
@@ -800,13 +788,7 @@ fn query_reverse_routes_with_to_native() {
             msg: to_binary(&Cw20ExecuteMsg::Send {
                 contract: "pair0000".to_string(),
                 amount: Uint128::from(target_amount),
-                msg: to_binary(&PairExecuteMsg::Swap {
-                    offer_asset: Asset {
-                        info: AssetInfo::Token {
-                            contract_addr: "asset0000".to_string(),
-                        },
-                        amount: Uint128::from(target_amount),
-                    },
+                msg: to_binary(&PairHookMsg::Swap {
                     belief_price: None,
                     max_spread: None,
                     to: None,
