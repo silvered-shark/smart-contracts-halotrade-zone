@@ -1,3 +1,4 @@
+use cosmwasm_schema::cw_serde;
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
 
@@ -34,8 +35,9 @@ pub enum ExecuteMsg {
     },
 }
 
-#[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
-#[serde(rename_all = "snake_case")]
+// #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
+// #[serde(rename_all = "snake_case")]
+#[cw_serde]
 pub enum Cw20HookMsg {
     /// Sell a given amount of asset
     Swap {
