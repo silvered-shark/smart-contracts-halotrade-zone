@@ -165,5 +165,26 @@ mod add_liquidity {
         // the balance of token_a of the pair contract should be 10000000
         assert_eq!(balance.balance, Uint128::from(10000000u128));
 
+        // prepare the query the balance of token_b of the pair contract message
+        let msg = Cw20QueryMsg::Balance {
+            address: pair_contract_addr.clone(),
+        };
+
+        // query the balance of token_b of the pair contract
+        let balance: BalanceResponse = app.wrap().query_wasm_smart(token_b_contract_addr.clone(), &msg).unwrap();
+
+        // the balance of token_b of the pair contract should be 10000000
+        assert_eq!(balance.balance, Uint128::from(10000000u128));
+
+        // prepare the query the balance of lp_token of the ADMIN message
+        let msg = Cw20QueryMsg::Balance {
+            address: ADMIN.to_string(),
+        };
+
+        // query the balance of lp_token of the ADMIN
+        let balance: BalanceResponse = app.wrap().query_wasm_smart(lp_token_contract_addr.clone(), &msg).unwrap();
+
+        // the balance of lp_token of the ADMIN should be 10000000
+        assert_eq!(balance.balance, Uint128::from(10000000u128));
     }    
 }
