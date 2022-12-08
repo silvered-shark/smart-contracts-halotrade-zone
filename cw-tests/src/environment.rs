@@ -17,6 +17,15 @@ use haloswap::router::InstantiateMsg as HaloRouterInstantiateMsg;
 pub const USER: &str = "aura1fqj2redmssckrdeekhkcvd2kzp9f4nks4fctrt";
 pub const ADMIN: &str = "aura1uh24g2lc8hvvkaaf7awz25lrh5fptthu2dhq0n";
 pub const NATIVE_DENOM: &str = "uaura";
+pub const NATIVE_DENOM_2: &str = "uaura1";
+
+// a struct containing the code ids of the contracts
+pub struct CodeIds {
+    pub halo_token_code_id: u64,
+    pub halo_pair_code_id: u64,
+    pub halo_factory_code_id: u64,
+    pub halo_router_code_id: u64,
+}
 
 pub const TOKEN_INITIAL_BALANCE: u128 = 1000000000000u128;
 
@@ -29,6 +38,10 @@ fn mock_app() -> App {
                 &Addr::unchecked(ADMIN),
                 vec![Coin {
                     denom: NATIVE_DENOM.to_string(),
+                    amount: Uint128::new(1000000000000u128.into()),
+                },
+                Coin {
+                    denom: NATIVE_DENOM_2.to_string(),
                     amount: Uint128::new(1000000000000u128.into()),
                 }],
             )
@@ -79,15 +92,24 @@ fn halo_router_contract_template() -> Box<dyn Contract<Empty>> {
 /// @return token_B: halo_token - the address of token B
 /// @return swap_factory: halo_factory - the address of swap factory contract
 /// @return swap_router: halo_router - the address of swap router contract
-pub fn instantiate_contracts() -> (App, String, String, String, String) {
+/// @return code_ids: CodeIds - the code ids of all contracts
+pub fn instantiate_contracts() -> (App, String, String, String, String, CodeIds) {
     // Create a new app instance
     let mut app = mock_app();
 
-    // store the code of contract_template an get code ID
+    // store the code of all contracts to the app and get the code ids
     let halo_token_id = app.store_code(halo_token_contract_template());
     let halo_pair_id = app.store_code(halo_pair_contract_template());
     let halo_factory_id = app.store_code(halo_factory_contract_template());
     let halo_router_id = app.store_code(halo_router_contract_template());
+
+    // store the code ids to the struct CodeIds
+    let code_ids = CodeIds {
+        halo_token_code_id: halo_token_id,
+        halo_pair_code_id: halo_pair_id,
+        halo_factory_code_id: halo_factory_id,
+        halo_router_code_id: halo_router_id,
+    };
 
     // create instantiate message for token_A
     let token_a_instantiate_msg = HaloTokenInstantiateMsg {
@@ -215,5 +237,6 @@ pub fn instantiate_contracts() -> (App, String, String, String, String) {
         token_b_contract_addr.to_string(),
         swap_factory_contract_addr.to_string(),
         swap_router_contract_addr.to_string(),
+        code_ids,
     )
 }

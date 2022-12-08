@@ -12,6 +12,7 @@ fn test_transfer() {
         _token_b_contract_addr,
         _swap_factory_contract_addr,
         _swap_router_contract_addr,
+        _code_ids
     ) = instantiate_contracts();
 
     // create message to query balance of admin
