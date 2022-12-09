@@ -5,6 +5,33 @@ use haloswap::factory::{ExecuteMsg as FactoryExecuteMsg, QueryMsg as FactoryQuer
 use haloswap::asset::{AssetInfo, PairInfo};
 use haloswap::pair::QueryMsg as PairQueryMsg;
 
+// pub fn create_pair(
+//     mut app: App,
+//     factory_addr: String,
+//     token_a_addr: String,
+//     token_b_addr: String,
+// ) -> AnyResult<AppResponse> {
+//     // create message to create new pair
+//     let msg = FactoryExecuteMsg::CreatePair {
+//         asset_infos: [
+//             AssetInfo::Token { 
+//                 contract_addr: token_a_addr.to_string()
+//             },
+//             AssetInfo::Token { 
+//                 contract_addr: token_b_addr.to_string() 
+//             },
+//         ],
+//     };
+
+//     // execute create pair message on factory contract
+//     app.execute_contract(
+//         Addr::unchecked(ADMIN),
+//         Addr::unchecked(factory_addr.clone()),
+//         &msg,
+//         &[]
+//     )
+// }
+
 // module to test creating the pair between cw20 and cw20
 mod create_pair_cw20_and_cw20 {
     use super::*;
