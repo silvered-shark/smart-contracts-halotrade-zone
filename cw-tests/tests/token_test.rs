@@ -1,8 +1,53 @@
-use cw20::BalanceResponse;
+use cw20::{BalanceResponse, Cw20Coin, MinterResponse};
 use cw20_base::msg::ExecuteMsg as HaloTokenExecuteMsg;
-use cosmwasm_std::{Addr, Uint128, Coin};
+use cosmwasm_std::{Addr, Uint128, Coin, StdError};
 use cw_multi_test::Executor;
 use tests::environment::{ADMIN, USER, NATIVE_DENOM, TOKEN_INITIAL_BALANCE, instantiate_contracts};
+use haloswap::token::InstantiateMsg as HaloTokenInstantiateMsg;
+
+// cannot instantiate contract with Initial supply greater than cap
+#[test]
+fn test_instantiate_with_too_large_initial_supply() {
+    // instantiate contracts
+    let (mut app,
+        _token_a_contract_addr,
+        _token_b_contract_addr,
+        _swap_factory_contract_addr,
+        _swap_router_contract_addr,
+        code_ids
+    ) = instantiate_contracts();
+
+    // create instantiate message for token_A
+    let token_a_instantiate_msg = HaloTokenInstantiateMsg {
+        name: "Token A".to_string(),
+        symbol: "TKA".to_string(),
+        decimals: 6,
+        initial_balances: [
+            Cw20Coin {
+                address: ADMIN.to_string(),
+                amount: Uint128::new(TOKEN_INITIAL_BALANCE+1),
+            },
+        ].to_vec(),
+        mint: Some(MinterResponse {
+            minter: ADMIN.to_string(),
+            cap: Some(Uint128::new(TOKEN_INITIAL_BALANCE)),
+        }),
+    };
+
+    // instantiate token_A
+    let res = app
+        .instantiate_contract(
+            code_ids.halo_token_code_id.clone(),
+            Addr::unchecked(ADMIN),
+            &token_a_instantiate_msg,
+            &[],
+            "test instantiate token A",
+            None,
+        );
+    
+    assert_eq!(res.unwrap_err().source().unwrap().to_string(), StdError::generic_err("Initial supply greater than cap").to_string());
+
+}
 
 #[test]
 fn test_transfer() {

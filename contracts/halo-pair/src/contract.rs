@@ -289,7 +289,7 @@ pub fn provide_liquidity(
         )
     };
 
-    // prevent providing free token (hoanm: is this necessary?)
+    // prevent providing free token (one of the deposits is zero)
     if share.is_zero() {
         return Err(ContractError::InvalidZeroAmount {});
     }
