@@ -1,4 +1,4 @@
-use cosmwasm_schema::cw_serde;
+use cosmwasm_schema::{cw_serde, QueryResponses};
 use cosmwasm_std::Uint128;
 use cw20::Cw20ReceiveMsg;
 
@@ -61,12 +61,16 @@ pub enum Cw20HookMsg {
 }
 
 #[cw_serde]
+#[derive(QueryResponses)]
 pub enum QueryMsg {
+    #[returns(ConfigResponse)]
     Config {},
+    #[returns(SimulateSwapOperationsResponse)]
     SimulateSwapOperations {
         offer_amount: Uint128,
         operations: Vec<SwapOperation>,
     },
+    #[returns(SimulateSwapOperationsResponse)]
     ReverseSimulateSwapOperations {
         ask_amount: Uint128,
         operations: Vec<SwapOperation>,

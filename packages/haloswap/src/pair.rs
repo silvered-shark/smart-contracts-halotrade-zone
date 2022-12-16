@@ -1,6 +1,6 @@
-use cosmwasm_schema::cw_serde;
+use cosmwasm_schema::{cw_serde, QueryResponses};
 
-use crate::asset::{Asset, AssetInfo};
+use crate::asset::{Asset, AssetInfo, PairInfo};
 
 use cosmwasm_std::{Decimal, Uint128};
 use cw20::Cw20ReceiveMsg;
@@ -46,10 +46,15 @@ pub enum Cw20HookMsg {
 }
 
 #[cw_serde]
+#[derive(QueryResponses)]
 pub enum QueryMsg {
+    #[returns(PairInfo)]
     Pair {},
+    #[returns(PoolResponse)]
     Pool {},
+    #[returns(SimulationResponse)]
     Simulation { offer_asset: Asset },
+    #[returns(ReverseSimulationResponse)]
     ReverseSimulation { ask_asset: Asset },
 }
 

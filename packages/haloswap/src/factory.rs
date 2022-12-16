@@ -1,4 +1,4 @@
-use cosmwasm_schema::cw_serde;
+use cosmwasm_schema::{cw_serde, QueryResponses};
 
 use crate::asset::{AssetInfo, PairInfo};
 
@@ -33,15 +33,20 @@ pub enum ExecuteMsg {
 }
 
 #[cw_serde]
+#[derive(QueryResponses)]
 pub enum QueryMsg {
+    #[returns(ConfigResponse)]
     Config {},
+    #[returns(PairInfo)]
     Pair {
         asset_infos: [AssetInfo; 2],
     },
+    #[returns(PairsResponse)]
     Pairs {
         start_after: Option<[AssetInfo; 2]>,
         limit: Option<u32>,
     },
+    #[returns(NativeTokenDecimalsResponse)]
     NativeTokenDecimals {
         denom: String,
     },
