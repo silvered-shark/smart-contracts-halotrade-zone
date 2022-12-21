@@ -8,9 +8,9 @@ use cosmwasm_std::testing::{
 };
 use cosmwasm_std::{
     attr, coin, from_binary, to_binary, CosmosMsg, OwnedDeps, Reply, ReplyOn, Response, StdError,
-    SubMsg, SubMsgResponse, SubMsgResult, Uint128, WasmMsg,
+    SubMsg, SubMsgResponse, SubMsgResult, Uint128, WasmMsg, Addr,
 };
-use haloswap::asset::{AssetInfo, PairInfo};
+use haloswap::asset::{AssetInfo, PairInfo, CreatePairRequirements};
 use haloswap::factory::{
     ConfigResponse, ExecuteMsg, InstantiateMsg, NativeTokenDecimalsResponse, QueryMsg,
 };
@@ -142,6 +142,11 @@ fn create_pair() {
 
     let msg = ExecuteMsg::CreatePair {
         asset_infos: asset_infos.clone(),
+        requirements: CreatePairRequirements {
+            whitelist: vec![Addr::unchecked("deployer")],
+            first_asset_minimum: Uint128::zero(),
+            second_asset_minimum: Uint128::zero(),
+        },
     };
 
     let env = mock_env();
@@ -164,7 +169,12 @@ fn create_pair() {
                 msg: to_binary(&PairInstantiateMsg {
                     asset_infos: asset_infos.clone(),
                     token_code_id: 123u64,
-                    asset_decimals: [6u8, 8u8]
+                    asset_decimals: [6u8, 8u8],
+                    requirements: CreatePairRequirements {
+                        whitelist: vec![Addr::unchecked("deployer")],
+                        first_asset_minimum: Uint128::zero(),
+                        second_asset_minimum: Uint128::zero(),
+                    },
                 })
                 .unwrap(),
                 code_id: 321u64,
@@ -214,6 +224,11 @@ fn create_pair_native_token_and_ibc_token() {
 
     let msg = ExecuteMsg::CreatePair {
         asset_infos: asset_infos.clone(),
+        requirements: CreatePairRequirements {
+            whitelist: vec![Addr::unchecked("deployer")],
+            first_asset_minimum: Uint128::zero(),
+            second_asset_minimum: Uint128::zero(),
+        },
     };
 
     let env = mock_env();
@@ -233,7 +248,12 @@ fn create_pair_native_token_and_ibc_token() {
                 msg: to_binary(&PairInstantiateMsg {
                     asset_infos: asset_infos.clone(),
                     token_code_id: 123u64,
-                    asset_decimals: [6u8, 6u8]
+                    asset_decimals: [6u8, 6u8],
+                    requirements: CreatePairRequirements {
+                        whitelist: vec![Addr::unchecked("deployer")],
+                        first_asset_minimum: Uint128::zero(),
+                        second_asset_minimum: Uint128::zero(),
+                    },
                 })
                 .unwrap(),
                 code_id: 321u64,
@@ -274,7 +294,13 @@ fn fail_to_create_same_pair() {
         },
     ];
 
-    let msg = ExecuteMsg::CreatePair { asset_infos };
+    let requirements = CreatePairRequirements {
+        whitelist: vec![Addr::unchecked("deployer")],
+        first_asset_minimum: Uint128::zero(),
+        second_asset_minimum: Uint128::zero(),
+    };
+
+    let msg = ExecuteMsg::CreatePair { asset_infos, requirements };
 
     let env = mock_env();
     let info = mock_info("addr0000", &[]);
@@ -295,7 +321,13 @@ fn fail_to_create_pair_with_unactive_denoms() {
         },
     ];
 
-    let msg = ExecuteMsg::CreatePair { asset_infos };
+    let requirements = CreatePairRequirements {
+        whitelist: vec![Addr::unchecked("deployer")],
+        first_asset_minimum: Uint128::zero(),
+        second_asset_minimum: Uint128::zero(),
+    };
+
+    let msg = ExecuteMsg::CreatePair { asset_infos, requirements };
 
     let env = mock_env();
     let info = mock_info("addr0000", &[]);
@@ -316,7 +348,13 @@ fn fail_to_create_pair_with_invalid_denom() {
         },
     ];
 
-    let msg = ExecuteMsg::CreatePair { asset_infos };
+    let requirements = CreatePairRequirements {
+        whitelist: vec![Addr::unchecked("deployer")],
+        first_asset_minimum: Uint128::zero(),
+        second_asset_minimum: Uint128::zero(),
+    };
+
+    let msg = ExecuteMsg::CreatePair { asset_infos, requirements };
 
     let env = mock_env();
     let info = mock_info("addr0000", &[]);
@@ -347,7 +385,13 @@ fn fail_to_create_pair_with_unknown_token() {
         },
     ];
 
-    let msg = ExecuteMsg::CreatePair { asset_infos };
+    let requirements = CreatePairRequirements {
+        whitelist: vec![Addr::unchecked("deployer")],
+        first_asset_minimum: Uint128::zero(),
+        second_asset_minimum: Uint128::zero(),
+    };
+
+    let msg = ExecuteMsg::CreatePair { asset_infos, requirements };
 
     let env = mock_env();
     let info = mock_info("addr0000", &[]);
@@ -378,7 +422,13 @@ fn fail_to_create_pair_with_unknown_ibc_token() {
         },
     ];
 
-    let msg = ExecuteMsg::CreatePair { asset_infos };
+    let requirements = CreatePairRequirements {
+        whitelist: vec![Addr::unchecked("deployer")],
+        first_asset_minimum: Uint128::zero(),
+        second_asset_minimum: Uint128::zero(),
+    };
+
+    let msg = ExecuteMsg::CreatePair { asset_infos, requirements };
 
     let env = mock_env();
     let info = mock_info("addr0000", &[]);
@@ -447,6 +497,11 @@ fn reply_test() {
                 contract_addr: "0000".to_string(),
                 liquidity_token: "liquidity0000".to_string(),
                 asset_decimals: [8u8, 8u8],
+                requirements: CreatePairRequirements {
+                    whitelist: vec![Addr::unchecked("deployer")],
+                    first_asset_minimum: Uint128::zero(),
+                    second_asset_minimum: Uint128::zero(),
+                },
             },
         )],
         &[],
@@ -470,7 +525,12 @@ fn reply_test() {
             liquidity_token: "liquidity0000".to_string(),
             contract_addr: "0000".to_string(),
             asset_infos,
-            asset_decimals: [8u8, 8u8]
+            asset_decimals: [8u8, 8u8],
+            requirements: CreatePairRequirements {
+                whitelist: vec![Addr::unchecked("deployer")],
+                first_asset_minimum: Uint128::zero(),
+                second_asset_minimum: Uint128::zero(),
+            },
         }
     );
 }

@@ -1,6 +1,6 @@
-use cosmwasm_schema::cw_serde;
+use cosmwasm_schema::{cw_serde, QueryResponses};
 
-use crate::asset::{Asset, AssetInfo};
+use crate::asset::{Asset, AssetInfo, PairInfo, CreatePairRequirements};
 
 use cosmwasm_std::{Decimal, Uint128};
 use cw20::Cw20ReceiveMsg;
@@ -12,6 +12,8 @@ pub struct InstantiateMsg {
     /// Token contract code id for initialization
     pub token_code_id: u64,
     pub asset_decimals: [u8; 2],
+    /// The requiments to the first time provide liquidity
+    pub requirements: CreatePairRequirements,
 }
 
 #[cw_serde]
@@ -46,10 +48,15 @@ pub enum Cw20HookMsg {
 }
 
 #[cw_serde]
+#[derive(QueryResponses)]
 pub enum QueryMsg {
+    #[returns(PairInfo)]
     Pair {},
+    #[returns(PoolResponse)]
     Pool {},
+    #[returns(SimulationResponse)]
     Simulation { offer_asset: Asset },
+    #[returns(ReverseSimulationResponse)]
     ReverseSimulation { ask_asset: Asset },
 }
 

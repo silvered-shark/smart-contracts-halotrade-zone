@@ -8,10 +8,10 @@ use haloswap::mock_querier::mock_dependencies;
 use cosmwasm_std::testing::{mock_env, mock_info, MOCK_CONTRACT_ADDR};
 use cosmwasm_std::{
     attr, to_binary, BankMsg, Coin, CosmosMsg, Decimal, Reply, ReplyOn, Response, StdError, SubMsg,
-    SubMsgResponse, SubMsgResult, Uint128, WasmMsg,
+    SubMsgResponse, SubMsgResult, Uint128, WasmMsg, Addr,
 };
 use cw20::{Cw20ExecuteMsg, Cw20ReceiveMsg, MinterResponse};
-use haloswap::asset::{Asset, AssetInfo, PairInfo};
+use haloswap::asset::{Asset, AssetInfo, PairInfo, CreatePairRequirements};
 use haloswap::pair::{
     Cw20HookMsg, ExecuteMsg, InstantiateMsg, PoolResponse, ReverseSimulationResponse,
     SimulationResponse,
@@ -33,6 +33,11 @@ fn proper_initialization() {
         ],
         token_code_id: 10u64,
         asset_decimals: [6u8, 8u8],
+        requirements: CreatePairRequirements {
+            whitelist: vec![Addr::unchecked("addr0000")],
+            first_asset_minimum: Uint128::zero(),
+            second_asset_minimum: Uint128::zero(),
+        },
     };
 
     // we can just call .unwrap() to assert this was a success
@@ -124,6 +129,11 @@ fn provide_liquidity() {
         ],
         token_code_id: 10u64,
         asset_decimals: [6u8, 8u8],
+        requirements: CreatePairRequirements {
+            whitelist: vec![Addr::unchecked("addr0000")],
+            first_asset_minimum: Uint128::zero(),
+            second_asset_minimum: Uint128::zero(),
+        },
     };
 
     let env = mock_env();
@@ -531,6 +541,11 @@ fn withdraw_liquidity() {
         ],
         token_code_id: 10u64,
         asset_decimals: [6u8, 8u8],
+        requirements: CreatePairRequirements {
+            whitelist: vec![Addr::unchecked("addr0000")],
+            first_asset_minimum: Uint128::zero(),
+            second_asset_minimum: Uint128::zero(),
+        },
     };
 
     let env = mock_env();
@@ -648,6 +663,11 @@ fn try_native_to_token() {
         ],
         token_code_id: 10u64,
         asset_decimals: [6u8, 8u8],
+        requirements: CreatePairRequirements {
+            whitelist: vec![Addr::unchecked("addr0000")],
+            first_asset_minimum: Uint128::zero(),
+            second_asset_minimum: Uint128::zero(),
+        },
     };
 
     let env = mock_env();
@@ -822,6 +842,11 @@ fn try_token_to_native() {
         ],
         token_code_id: 10u64,
         asset_decimals: [8u8, 8u8],
+        requirements: CreatePairRequirements {
+            whitelist: vec![Addr::unchecked("addr0000")],
+            first_asset_minimum: Uint128::zero(),
+            second_asset_minimum: Uint128::zero(),
+        },
     };
 
     let env = mock_env();
@@ -1198,6 +1223,11 @@ fn test_query_pool() {
         ],
         token_code_id: 10u64,
         asset_decimals: [6u8, 8u8],
+        requirements: CreatePairRequirements {
+            whitelist: vec![Addr::unchecked("addr0000")],
+            first_asset_minimum: Uint128::zero(),
+            second_asset_minimum: Uint128::zero(),
+        },
     };
 
     let env = mock_env();

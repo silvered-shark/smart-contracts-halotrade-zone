@@ -1,13 +1,13 @@
 use cosmwasm_std::testing::{MockApi, MockQuerier, MockStorage, MOCK_CONTRACT_ADDR};
 use cosmwasm_std::{
     from_binary, from_slice, to_binary, Coin, ContractResult, Empty, OwnedDeps, Querier,
-    QuerierResult, QueryRequest, SystemError, SystemResult, Uint128, WasmQuery,
+    QuerierResult, QueryRequest, SystemError, SystemResult, Uint128, WasmQuery, Addr,
 };
 use std::collections::HashMap;
 use std::marker::PhantomData;
 use std::panic;
 
-use crate::asset::{AssetInfo, PairInfo};
+use crate::asset::{AssetInfo, PairInfo, CreatePairRequirements};
 use crate::factory::{NativeTokenDecimalsResponse, QueryMsg as FactoryQueryMsg};
 use crate::pair::QueryMsg as PairQueryMsg;
 use crate::pair::{ReverseSimulationResponse, SimulationResponse};
@@ -170,6 +170,11 @@ impl WasmMockQuerier {
                             asset_decimals: [6u8, 6u8],
                             contract_addr: "pair0000".to_string(),
                             liquidity_token: "liquidity0000".to_string(),
+                            requirements: CreatePairRequirements {
+                                whitelist: vec![Addr::unchecked("deployer")],
+                                first_asset_minimum: Uint128::zero(),
+                                second_asset_minimum: Uint128::zero(),
+                            },
                         })))
                     }
                     Ok(PairQueryMsg::Simulation { offer_asset }) => {
