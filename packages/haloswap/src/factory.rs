@@ -1,6 +1,6 @@
 use cosmwasm_schema::{cw_serde, QueryResponses};
 
-use crate::asset::{AssetInfo, PairInfo};
+use crate::asset::{AssetInfo, PairInfo, CreatePairRequirements};
 
 #[cw_serde]
 pub struct InstantiateMsg {
@@ -21,6 +21,8 @@ pub enum ExecuteMsg {
     CreatePair {
         /// Asset infos
         asset_infos: [AssetInfo; 2],
+        /// The requiments to create a pair
+        requirements: CreatePairRequirements,
     },
     AddNativeTokenDecimals {
         denom: String,

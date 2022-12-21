@@ -49,6 +49,7 @@ pub fn instantiate(
             msg.asset_infos[1].to_raw(deps.api)?,
         ],
         asset_decimals: msg.asset_decimals,
+        requirements: msg.requirements,
     };
 
     PAIR_INFO.save(deps.storage, pair_info)?;
@@ -273,6 +274,18 @@ pub fn provide_liquidity(
 
     // calculate the amount of LP token is minted to the user
     let share = if total_share == Uint128::zero() {
+        // when pool is empty
+        // if the sender is not in whitelist of requirements, then return error
+        if !pair_info.requirements.whitelist.contains(&info.sender) {
+            return Err(ContractError::Std(StdError::generic_err("the sender is not in whitelist")));
+        }
+
+        // if the minimum amount of deposit is not satisfied, then return error
+        if  deposits[0] < pair_info.requirements.first_asset_minimum || 
+            deposits[1] < pair_info.requirements.second_asset_minimum {
+            return Err(ContractError::Std(StdError::generic_err("the minimum deposit is not satisfied")));
+        }
+
         // if the total supply of the LP token is zero, Initial share = collateral amount
         // hoanm: EQUATION - LP = \sqrt{A * B}
         Uint128::from((deposits[0].u128() * deposits[1].u128()).integer_sqrt())

@@ -13,7 +13,7 @@ use crate::state::{
 };
 
 use cw_utils::parse_reply_instantiate_data;
-use haloswap::asset::{AssetInfo, PairInfo, PairInfoRaw};
+use haloswap::asset::{AssetInfo, PairInfo, PairInfoRaw, CreatePairRequirements};
 use haloswap::factory::{
     ConfigResponse, ExecuteMsg, InstantiateMsg, MigrateMsg, NativeTokenDecimalsResponse,
     PairsResponse, QueryMsg,
@@ -52,7 +52,7 @@ pub fn execute(deps: DepsMut, env: Env, info: MessageInfo, msg: ExecuteMsg) -> S
             token_code_id,
             pair_code_id,
         } => execute_update_config(deps, env, info, owner, token_code_id, pair_code_id),
-        ExecuteMsg::CreatePair { asset_infos } => execute_create_pair(deps, env, info, asset_infos),
+        ExecuteMsg::CreatePair { asset_infos, requirements } => execute_create_pair(deps, env, info, asset_infos, requirements),
         ExecuteMsg::AddNativeTokenDecimals { denom, decimals } => {
             execute_add_native_token_decimals(deps, env, info, denom, decimals)
         }
@@ -104,6 +104,7 @@ pub fn execute_create_pair(
     env: Env,
     _info: MessageInfo,
     asset_infos: [AssetInfo; 2],
+    requirements: CreatePairRequirements,
 ) -> StdResult<Response> {
     let config: Config = CONFIG.load(deps.storage)?;
 
@@ -162,6 +163,7 @@ pub fn execute_create_pair(
                     asset_infos,
                     token_code_id: config.token_code_id,
                     asset_decimals,
+                    requirements,
                 })?,
             }),
             reply_on: ReplyOn::Success,
@@ -246,6 +248,7 @@ pub fn reply(deps: DepsMut, _env: Env, msg: Reply) -> StdResult<Response> {
             contract_addr: deps.api.addr_canonicalize(&pair_contract)?,
             asset_infos: tmp_pair_info.asset_infos,
             asset_decimals: tmp_pair_info.asset_decimals,
+            requirements: pair_info.requirements,
         },
     )?;
 

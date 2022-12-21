@@ -89,6 +89,13 @@ impl Asset {
     }
 }
 
+#[cw_serde]
+pub struct CreatePairRequirements {
+    pub whitelist: Vec<Addr>,
+    pub first_asset_minimum: Uint128,
+    pub second_asset_minimum: Uint128,
+}
+
 /// AssetInfo contract_addr is usually passed from the cw20 hook
 /// so we can trust the contract_addr is properly validated.
 #[cw_serde]
@@ -250,6 +257,7 @@ pub struct PairInfo {
     pub contract_addr: String,
     pub liquidity_token: String,
     pub asset_decimals: [u8; 2],
+    pub requirements: CreatePairRequirements,
 }
 
 #[cw_serde]
@@ -258,6 +266,7 @@ pub struct PairInfoRaw {
     pub contract_addr: CanonicalAddr,
     pub liquidity_token: CanonicalAddr,
     pub asset_decimals: [u8; 2],
+    pub requirements: CreatePairRequirements,
 }
 
 impl PairInfoRaw {
@@ -270,6 +279,7 @@ impl PairInfoRaw {
                 self.asset_infos[1].to_normal(api)?,
             ],
             asset_decimals: self.asset_decimals,
+            requirements: self.requirements.clone(),
         })
     }
 
