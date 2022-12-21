@@ -3,7 +3,6 @@
 members = [
   'contracts/*',
   'packages/*',
-  'cw-tests',
 ]
 
 [profile.release]

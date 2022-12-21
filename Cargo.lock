@@ -963,28 +963,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "tests"
-version = "0.1.0"
-dependencies = [
- "cosmwasm-schema",
- "cosmwasm-std",
- "cosmwasm-storage",
- "cw-multi-test",
- "cw-storage-plus 1.0.0",
- "cw2 1.0.0",
- "cw20",
- "cw20-base",
- "halo-factory",
- "halo-pair",
- "halo-router",
- "halo-token",
- "haloswap",
- "schemars",
- "serde",
- "thiserror",
-]
-
-[[package]]
 name = "thiserror"
 version = "1.0.37"
 source = "registry+https://github.com/rust-lang/crates.io-index"

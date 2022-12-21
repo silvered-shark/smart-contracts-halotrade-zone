@@ -34,6 +34,9 @@ use haloswap::pair::QueryMsg as PairQueryMsg;
 
 // module to test creating the pair between cw20 and cw20
 mod create_pair_cw20_and_cw20 {
+    use haloswap::asset::CreatePairRequirements;
+    use tests::environment::ADMIN;
+
     use super::*;
     // asset 1 is invalid
     #[test]
@@ -57,6 +60,11 @@ mod create_pair_cw20_and_cw20 {
                     contract_addr: token_b_contract_addr.to_string() 
                 },
             ],
+            requirements: CreatePairRequirements {
+                whitelist: vec![Addr::unchecked(ADMIN.to_string())],
+                first_asset_minimum: Uint128::new(1000000),
+                second_asset_minimum: Uint128::new(1000000),
+            },
         };
 
         // execute create pair message on factory contract
@@ -92,6 +100,11 @@ mod create_pair_cw20_and_cw20 {
                     contract_addr: "invalid".to_string()
                 },
             ],
+            requirements: CreatePairRequirements {
+                whitelist: vec![Addr::unchecked(ADMIN.to_string())],
+                first_asset_minimum: Uint128::new(1000000),
+                second_asset_minimum: Uint128::new(1000000),
+            },
         };
 
         // execute create pair message on factory contract
@@ -127,6 +140,11 @@ mod create_pair_cw20_and_cw20 {
                     contract_addr: token_a_contract_addr.clone()
                 },
             ],
+            requirements: CreatePairRequirements {
+                whitelist: vec![Addr::unchecked(ADMIN.to_string())],
+                first_asset_minimum: Uint128::new(1000000),
+                second_asset_minimum: Uint128::new(1000000),
+            },
         };
 
         // execute create pair message on factory contract
@@ -162,6 +180,11 @@ mod create_pair_cw20_and_cw20 {
                     contract_addr: token_b_contract_addr.clone()
                 },
             ],
+            requirements: CreatePairRequirements {
+                whitelist: vec![Addr::unchecked(ADMIN.to_string())],
+                first_asset_minimum: Uint128::new(1000000),
+                second_asset_minimum: Uint128::new(1000000),
+            },
         };
 
         // execute create pair message on factory contract
@@ -247,6 +270,11 @@ mod create_pair_cw20_and_cw20 {
                     contract_addr: token_b_contract_addr.clone()
                 },
             ],
+            requirements: CreatePairRequirements {
+                whitelist: vec![Addr::unchecked(ADMIN.to_string())],
+                first_asset_minimum: Uint128::new(1000000),
+                second_asset_minimum: Uint128::new(1000000),
+            },
         };
 
         // execute create pair message on factory contract
@@ -319,6 +347,11 @@ mod create_pair_cw20_and_cw20 {
                     contract_addr: token_b_contract_addr.clone()
                 },
             ],
+            requirements: CreatePairRequirements {
+                whitelist: vec![Addr::unchecked(ADMIN.to_string())],
+                first_asset_minimum: Uint128::new(1000000),
+                second_asset_minimum: Uint128::new(1000000),
+            },
         };
 
         // execute create pair message on factory contract
@@ -354,6 +387,11 @@ mod create_pair_cw20_and_cw20 {
                     contract_addr: token_b_contract_addr.clone()
                 },
             ],
+            requirements: CreatePairRequirements {
+                whitelist: vec![Addr::unchecked(ADMIN.to_string())],
+                first_asset_minimum: Uint128::new(1000000),
+                second_asset_minimum: Uint128::new(1000000),
+            },
         };
 
         // execute create pair message on factory contract
@@ -426,6 +464,11 @@ mod create_pair_cw20_and_cw20 {
                     contract_addr: token_a_contract_addr.clone()
                 },
             ],
+            requirements: CreatePairRequirements {
+                whitelist: vec![Addr::unchecked(ADMIN.to_string())],
+                first_asset_minimum: Uint128::new(1000000),
+                second_asset_minimum: Uint128::new(1000000),
+            },
         };
 
         // execute create pair message on factory contract
@@ -442,7 +485,7 @@ mod create_pair_cw20_and_cw20 {
 
 // module to test adding the pair between native and cw20
 mod create_pair_native_and_cw20 {
-    use haloswap::factory::NativeTokenDecimalsResponse;
+    use haloswap::{factory::NativeTokenDecimalsResponse, asset::CreatePairRequirements};
     use tests::environment::USER;
 
     use super::*;
@@ -469,6 +512,11 @@ mod create_pair_native_and_cw20 {
                     contract_addr: token_a_contract_addr.clone()
                 },
             ],
+            requirements: CreatePairRequirements {
+                whitelist: vec![Addr::unchecked(ADMIN.to_string())],
+                first_asset_minimum: Uint128::new(1000000),
+                second_asset_minimum: Uint128::new(1000000),
+            },
         };
 
         // execute create pair message on factory contract
@@ -587,6 +635,11 @@ mod create_pair_native_and_cw20 {
                     contract_addr: token_a_contract_addr.clone()
                 },
             ],
+            requirements: CreatePairRequirements {
+                whitelist: vec![Addr::unchecked(ADMIN.to_string())],
+                first_asset_minimum: Uint128::new(1000000),
+                second_asset_minimum: Uint128::new(1000000),
+            },
         };
 
         // execute create pair message on factory contract
@@ -654,6 +707,7 @@ mod create_pair_native_and_cw20 {
 
 // module to test create new pair between native and native
 mod create_new_pair_native_and_native {
+    use haloswap::asset::CreatePairRequirements;
     use tests::environment::NATIVE_DENOM_2;
 
     use super::*;
@@ -680,6 +734,11 @@ mod create_new_pair_native_and_native {
                     denom: NATIVE_DENOM_2.to_string()
                 },
             ],
+            requirements: CreatePairRequirements {
+                whitelist: vec![Addr::unchecked(ADMIN.to_string())],
+                first_asset_minimum: Uint128::new(1000000),
+                second_asset_minimum: Uint128::new(1000000),
+            },
         };
 
         // execute create pair message on factory contract
@@ -743,6 +802,11 @@ mod create_new_pair_native_and_native {
                     denom: NATIVE_DENOM_2.to_string()
                 },
             ],
+            requirements: CreatePairRequirements {
+                whitelist: vec![Addr::unchecked(ADMIN.to_string())],
+                first_asset_minimum: Uint128::new(1000000),
+                second_asset_minimum: Uint128::new(1000000),
+            },
         };
 
         // execute create pair message on factory contract
@@ -809,7 +873,7 @@ mod create_new_pair_native_and_native {
 }
 
 mod query_test {
-    use haloswap::factory::PairsResponse;
+    use haloswap::{factory::PairsResponse, asset::CreatePairRequirements};
     use tests::environment::NATIVE_DENOM_2;
 
     use super::*;
@@ -863,6 +927,11 @@ mod query_test {
                     denom: NATIVE_DENOM_2.to_string()
                 },
             ],
+            requirements: CreatePairRequirements {
+                whitelist: vec![Addr::unchecked(ADMIN.to_string())],
+                first_asset_minimum: Uint128::new(1000000),
+                second_asset_minimum: Uint128::new(1000000),
+            },
         };
 
         // execute create pair message on factory contract
@@ -883,6 +952,11 @@ mod query_test {
                     contract_addr: token_b_contract_addr.clone()
                 },
             ],
+            requirements: CreatePairRequirements {
+                whitelist: vec![Addr::unchecked(ADMIN.to_string())],
+                first_asset_minimum: Uint128::new(1000000),
+                second_asset_minimum: Uint128::new(1000000),
+            },
         };
 
         // execute create pair message on factory contract
@@ -963,6 +1037,11 @@ mod query_test {
                     denom: NATIVE_DENOM_2.to_string()
                 },
             ],
+            requirements: CreatePairRequirements {
+                whitelist: vec![Addr::unchecked(ADMIN.to_string())],
+                first_asset_minimum: Uint128::new(1000000),
+                second_asset_minimum: Uint128::new(1000000),
+            },
         };
 
         // execute create pair message on factory contract
@@ -983,6 +1062,11 @@ mod query_test {
                     contract_addr: token_b_contract_addr.clone()
                 },
             ],
+            requirements: CreatePairRequirements {
+                whitelist: vec![Addr::unchecked(ADMIN.to_string())],
+                first_asset_minimum: Uint128::new(1000000),
+                second_asset_minimum: Uint128::new(1000000),
+            },
         };
 
         // execute create pair message on factory contract

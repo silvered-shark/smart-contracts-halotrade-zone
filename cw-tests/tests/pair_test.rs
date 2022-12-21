@@ -10,6 +10,8 @@ use tests::environment::NATIVE_DENOM;
 
 // test to add liquidity to a pair of cw20 tokens
 mod add_liquidity_to_cw20_and_cw20 {
+    use haloswap::asset::CreatePairRequirements;
+
     use super::*;
 
     // cannot provide liquidity if the first asset wrong
@@ -35,6 +37,11 @@ mod add_liquidity_to_cw20_and_cw20 {
                     contract_addr: token_b_contract_addr.clone()
                 },
             ],
+            requirements: CreatePairRequirements {
+                whitelist: vec![Addr::unchecked(ADMIN.to_string())],
+                first_asset_minimum: Uint128::new(1000000),
+                second_asset_minimum: Uint128::new(1000000),
+            },
         };
 
         // execute create pair message on factory contract
@@ -180,6 +187,11 @@ mod add_liquidity_to_cw20_and_cw20 {
                     contract_addr: token_b_contract_addr.clone()
                 },
             ],
+            requirements: CreatePairRequirements {
+                whitelist: vec![Addr::unchecked(ADMIN.to_string())],
+                first_asset_minimum: Uint128::new(1000000),
+                second_asset_minimum: Uint128::new(1000000),
+            },
         };
 
         // execute create pair message on factory contract
@@ -324,6 +336,11 @@ mod add_liquidity_to_cw20_and_cw20 {
                     contract_addr: token_b_contract_addr.clone()
                 },
             ],
+            requirements: CreatePairRequirements {
+                whitelist: vec![Addr::unchecked(ADMIN.to_string())],
+                first_asset_minimum: Uint128::new(1000000),
+                second_asset_minimum: Uint128::new(1000000),
+            },
         };
 
         // execute create pair message on factory contract
@@ -472,6 +489,11 @@ mod add_liquidity_to_cw20_and_cw20 {
                     contract_addr: token_b_contract_addr.clone()
                 },
             ],
+            requirements: CreatePairRequirements {
+                whitelist: vec![Addr::unchecked(ADMIN.to_string())],
+                first_asset_minimum: Uint128::new(1),
+                second_asset_minimum: Uint128::new(1),
+            },
         };
 
         // execute create pair message on factory contract
@@ -593,7 +615,7 @@ mod add_liquidity_to_cw20_and_cw20 {
             &[]
         );
 
-        assert_eq!(res.unwrap_err().source().unwrap().to_string(), "Invalid zero amount".to_string());
+        assert_eq!(res.unwrap_err().source().unwrap().to_string(), "Generic error: the minimum deposit is not satisfied".to_string());
     }
 
     // test to add liquidity to a pair of cw20 tokens
@@ -618,6 +640,11 @@ mod add_liquidity_to_cw20_and_cw20 {
                     contract_addr: token_b_contract_addr.clone()
                 },
             ],
+            requirements: CreatePairRequirements {
+                whitelist: vec![Addr::unchecked(ADMIN.to_string())],
+                first_asset_minimum: Uint128::new(1000000),
+                second_asset_minimum: Uint128::new(1000000),
+            },
         };
 
         // execute create pair message on factory contract
@@ -778,6 +805,8 @@ mod add_liquidity_to_cw20_and_cw20 {
 // test to add liquidity to a pair of native token and cw20 token
 mod add_liquidity_to_native_and_cw20 {
 
+    use haloswap::asset::CreatePairRequirements;
+
     use super::*;
 
     // cannot provide liquidity to a pair of native token and cw20 token if the native token is not enough
@@ -827,6 +856,11 @@ mod add_liquidity_to_native_and_cw20 {
                     contract_addr: token_a_contract_addr.clone()
                 },
             ],
+            requirements: CreatePairRequirements {
+                whitelist: vec![Addr::unchecked(ADMIN.to_string())],
+                first_asset_minimum: Uint128::new(1000000),
+                second_asset_minimum: Uint128::new(1000000),
+            },
         };
 
         // execute create pair message on factory contract
