@@ -13,9 +13,6 @@ use bignumber::{Decimal256, Uint256};
 use cw2::set_contract_version;
 use cw20::{Cw20ExecuteMsg, Cw20ReceiveMsg, MinterResponse};
 use cw_utils::parse_reply_instantiate_data;
-use integer_sqrt::IntegerSquareRoot;
-use std::cmp::Ordering;
-use std::str::FromStr;
 use haloswap::asset::{Asset, AssetInfo, PairInfo, PairInfoRaw};
 use haloswap::pair::{
     Cw20HookMsg, ExecuteMsg, InstantiateMsg, MigrateMsg, PoolResponse, QueryMsg,
@@ -23,6 +20,9 @@ use haloswap::pair::{
 };
 use haloswap::querier::query_token_info;
 use haloswap::token::InstantiateMsg as TokenInstantiateMsg;
+use integer_sqrt::IntegerSquareRoot;
+use std::cmp::Ordering;
+use std::str::FromStr;
 
 // version info for migration info
 const CONTRACT_NAME: &str = "crates.io:halo-pair";
@@ -93,33 +93,33 @@ pub fn execute(
             slippage_tolerance,
             receiver,
         } => provide_liquidity(deps, env, info, assets, slippage_tolerance, receiver),
-        ExecuteMsg::Swap {
-            offer_asset,
-            belief_price,
-            max_spread,
-            to,
-        } => {
-            if !offer_asset.is_native_token() {
-                return Err(ContractError::Unauthorized {});
-            }
+        // ExecuteMsg::Swap {
+        //     offer_asset,
+        //     belief_price,
+        //     max_spread,
+        //     to,
+        // } => {
+        //     if !offer_asset.is_native_token() {
+        //         return Err(ContractError::Unauthorized {});
+        //     }
 
-            let to_addr = if let Some(to_addr) = to {
-                Some(deps.api.addr_validate(&to_addr)?)
-            } else {
-                None
-            };
+        //     let to_addr = if let Some(to_addr) = to {
+        //         Some(deps.api.addr_validate(&to_addr)?)
+        //     } else {
+        //         None
+        //     };
 
-            swap(
-                deps,
-                env,
-                info.clone(),
-                info.sender,
-                offer_asset,
-                belief_price,
-                max_spread,
-                to_addr,
-            )
-        }
+        //     swap(
+        //         deps,
+        //         env,
+        //         info.clone(),
+        //         info.sender,
+        //         offer_asset,
+        //         belief_price,
+        //         max_spread,
+        //         to_addr,
+        //     )
+        // }
     }
 }
 
@@ -222,7 +222,8 @@ pub fn provide_liquidity(
     let pair_info: PairInfoRaw = PAIR_INFO.load(deps.storage)?;
 
     // query the information of the pair of assets
-    let mut pools: [Asset; 2] = pair_info.query_pools(&deps.querier, deps.api, env.contract.address.clone())?;
+    let mut pools: [Asset; 2] =
+        pair_info.query_pools(&deps.querier, deps.api, env.contract.address.clone())?;
 
     // get the amount of assets that user deposited after checking the assets is same as the assets in pair
     let deposits: [Uint128; 2] = [
@@ -277,13 +278,18 @@ pub fn provide_liquidity(
         // when pool is empty
         // if the sender is not in whitelist of requirements, then return error
         if !pair_info.requirements.whitelist.contains(&info.sender) {
-            return Err(ContractError::Std(StdError::generic_err("the sender is not in whitelist")));
+            return Err(ContractError::Std(StdError::generic_err(
+                "the sender is not in whitelist",
+            )));
         }
 
         // if the minimum amount of deposit is not satisfied, then return error
-        if  deposits[0] < pair_info.requirements.first_asset_minimum || 
-            deposits[1] < pair_info.requirements.second_asset_minimum {
-            return Err(ContractError::Std(StdError::generic_err("the minimum deposit is not satisfied")));
+        if deposits[0] < pair_info.requirements.first_asset_minimum
+            || deposits[1] < pair_info.requirements.second_asset_minimum
+        {
+            return Err(ContractError::Std(StdError::generic_err(
+                "the minimum deposit is not satisfied",
+            )));
         }
 
         // if the total supply of the LP token is zero, Initial share = collateral amount
@@ -549,7 +555,7 @@ pub fn query_reverse_simulation(
 
     // get address of the pair contract
     let contract_addr = deps.api.addr_humanize(&pair_info.contract_addr)?;
-    
+
     // get pool info of the pair contract
     let pools: [Asset; 2] = pair_info.query_pools(&deps.querier, deps.api, contract_addr)?;
 
@@ -586,7 +592,7 @@ pub fn amount_of(coins: &[Coin], denom: String) -> Uint128 {
 // User want to swap from 'offer' to 'ask'
 // Calculate the expected return_amount, spread_amount and commission_amount based on the formula
 // return_amount = offer_amount * (1 - spread) * ask_pool / (offer_pool + offer_amount)
-fn  compute_swap(
+fn compute_swap(
     offer_pool: Uint128,
     ask_pool: Uint128,
     offer_amount: Uint128,
