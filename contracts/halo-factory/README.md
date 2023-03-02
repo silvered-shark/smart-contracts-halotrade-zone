@@ -1,1 +1,90 @@
 # halo-factory
+## Introduction
+
+This is a smart contract that allows anyone to create their own token pair such as Native token(eg. AURA) - CW20 token contracts, Native token - Native token or CW20 token contracts - CW20 token contract for swapping on a decentralized exchange (DEX) on AURA Network. The halo factory contract provides a simple and easy way to create custom token pairs without needing to write any code.
+
+## Getting Started
+
+### Prerequisites
+
+- [Rust](https://www.rust-lang.org/tools/install)
+- [Cosmos SDK](https://docs.cosmos.network/master/run-node/)
+- [CosmWasm](https://docs.cosmwasm.com/0.16/getting-started/installation.html)
+- Beaker tools:
+
+```bash
+cargo install -f beaker # `-f` flag for up-to-date version
+```
+
+### Installing
+
+Clone the repository from: [Halo-swap repo](https://github.com/aura-nw/halo-swap)
+
+```bash
+git clone https://github.com/aura-nw/halo-swap.git
+```
+
+### Build the contract
+
+1. Build .wasm file stored in `target/wasm32-unknown-unknown/release/<CONTRACT_NAME>.wasm`
+`--no-wasm-opt` is suitable for development, explained below
+
+```bash
+beaker wasm build --no-wasm-opt
+```
+
+### Deployment
+
+1. Update Beaker.toml file
+
+```bash
+name = "halo-swap"
+gas_price = '0.025uaura'
+gas_adjustment = 1.3
+account_prefix = 'aura'
+derivation_path = '''m/44'/118'/0'/0/0'''
+
+[networks.serenity]
+chain_id = 'serenity-testnet-001'
+network_variant = 'Shared'
+grpc_endpoint = 'https://grpc.serenity.aura.network:9092'
+rpc_endpoint = 'https://rpc.serenity.aura.network'
+
+[accounts.signer]
+mnemonic = 'around cushion believe vicious member trophy grit disease diagram nice only post nut beef mosquito thumb huge pelican disorder orchard response left phrase degree'
+
+[wasm]
+contract_dir = 'contracts'
+optimizer_version = '0.12.9'
+```
+
+2. Store code on chain
+
+Read .wasm in `target/wasm32-unknown-unknown/release/<CONTRACT_NAME>.wasm` due to `--no-wasm-opt` flag
+use `--signer-account test1` which is predefined.
+The list of all predefined accounts are here: https://github.com/osmosis-labs/LocalOsmosis#accounts
+code-id` is stored in the beaker state, local by default
+
+```bash
+beaker wasm store-code halo-factory --signer-account signer --no-wasm-opt --network serenity
+```
+
+The result should be like this:
+    
+    ```bash
+      Code stored successfully!! 🎉
+    +
+    ├── code_id: 1049
+    └── instantiate_permission: –
+    ```
+
+3. Instantiate contract with instantiate msg:
+    
+    ```bash
+    beaker wasm instantiate halo-factory '{"pair_code_id": 1050, "token_code_id": 1051}' --signer-account signer --network serenity
+    ```
+
+
+
+
+
