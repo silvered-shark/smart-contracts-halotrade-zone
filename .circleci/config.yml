@@ -194,8 +194,6 @@ jobs:
       - run:
           name: Coverage using docker
           command: docker run -e CI=true -e CODECOV_TOKEN=${CODECOV_TOKEN} --security-opt seccomp=unconfined -v "${PWD}:/volume" xd009642/tarpaulin:0.22.0 bash -c "cargo tarpaulin --release --ignore-tests -o Xml && bash <(curl -s https://codecov.io/bash)"
-      - name: Upload coverage reports to Codecov
-          uses: codecov/codecov-action@v3
 
   # This runs one time on the top level to ensure all contracts compile properly into wasm.
   # We don't run the wasm build per contract build, and then reuse a lot of the same dependencies, so this speeds up CI time
