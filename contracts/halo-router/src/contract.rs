@@ -11,7 +11,6 @@ use crate::operations::execute_swap_operation;
 use crate::state::{Config, CONFIG};
 
 use cw20::Cw20ReceiveMsg;
-use std::collections::HashMap;
 use haloswap::asset::{Asset, AssetInfo, PairInfo};
 use haloswap::pair::SimulationResponse;
 use haloswap::querier::{query_pair_info, reverse_simulate, simulate};
@@ -19,6 +18,7 @@ use haloswap::router::{
     ConfigResponse, Cw20HookMsg, ExecuteMsg, InstantiateMsg, MigrateMsg, QueryMsg,
     SimulateSwapOperationsResponse, SwapOperation,
 };
+use std::collections::HashMap;
 
 // version info for migration info
 const CONTRACT_NAME: &str = "crates.io:halo-router";
@@ -221,10 +221,7 @@ pub fn query(deps: Deps, _env: Env, msg: QueryMsg) -> StdResult<Binary> {
 pub fn query_config(deps: Deps) -> StdResult<ConfigResponse> {
     let state = CONFIG.load(deps.storage)?;
     let resp = ConfigResponse {
-        halo_factory: deps
-            .api
-            .addr_humanize(&state.halo_factory)?
-            .to_string(),
+        halo_factory: deps.api.addr_humanize(&state.halo_factory)?.to_string(),
     };
 
     Ok(resp)

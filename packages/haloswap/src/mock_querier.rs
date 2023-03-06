@@ -1,13 +1,13 @@
 use cosmwasm_std::testing::{MockApi, MockQuerier, MockStorage, MOCK_CONTRACT_ADDR};
 use cosmwasm_std::{
-    from_binary, from_slice, to_binary, Coin, ContractResult, Empty, OwnedDeps, Querier,
-    QuerierResult, QueryRequest, SystemError, SystemResult, Uint128, WasmQuery, Addr,
+    from_binary, from_slice, to_binary, Addr, Coin, ContractResult, Empty, OwnedDeps, Querier,
+    QuerierResult, QueryRequest, SystemError, SystemResult, Uint128, WasmQuery,
 };
 use std::collections::HashMap;
 use std::marker::PhantomData;
 use std::panic;
 
-use crate::asset::{AssetInfo, PairInfo, CreatePairRequirements};
+use crate::asset::{AssetInfo, CreatePairRequirements, PairInfo};
 use crate::factory::{NativeTokenDecimalsResponse, QueryMsg as FactoryQueryMsg};
 use crate::pair::QueryMsg as PairQueryMsg;
 use crate::pair::{ReverseSimulationResponse, SimulationResponse};
@@ -139,11 +139,7 @@ impl WasmMockQuerier {
                     }
                 }
                 Ok(FactoryQueryMsg::NativeTokenDecimals { denom }) => {
-                    match self
-                        .halo_factory_querier
-                        .native_token_decimals
-                        .get(&denom)
-                    {
+                    match self.halo_factory_querier.native_token_decimals.get(&denom) {
                         Some(decimals) => SystemResult::Ok(ContractResult::Ok(
                             to_binary(&NativeTokenDecimalsResponse {
                                 decimals: *decimals,
