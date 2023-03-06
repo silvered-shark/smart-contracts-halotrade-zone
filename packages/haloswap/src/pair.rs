@@ -1,6 +1,6 @@
 use cosmwasm_schema::{cw_serde, QueryResponses};
 
-use crate::asset::{Asset, AssetInfo, PairInfo, CreatePairRequirements};
+use crate::asset::{Asset, AssetInfo, CreatePairRequirements, PairInfo};
 
 use cosmwasm_std::{Decimal, Uint128};
 use cw20::Cw20ReceiveMsg;
@@ -25,13 +25,13 @@ pub enum ExecuteMsg {
         slippage_tolerance: Option<Decimal>,
         receiver: Option<String>,
     },
-    /// Swap an offer asset to the other
-    Swap {
-        offer_asset: Asset,
-        belief_price: Option<Decimal>,
-        max_spread: Option<Decimal>,
-        to: Option<String>,
-    },
+    // /// Swap an offer asset to the other
+    // Swap {
+    //     offer_asset: Asset,
+    //     belief_price: Option<Decimal>,
+    //     max_spread: Option<Decimal>,
+    //     to: Option<String>,
+    // },
 }
 
 #[cw_serde]
