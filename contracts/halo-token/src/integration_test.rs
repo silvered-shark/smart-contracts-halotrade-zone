@@ -9,6 +9,9 @@ mod tests {
     use cw20::{Expiration as Cw20Expiration, TokenInfoResponse, Cw20Coin, MinterResponse};
     use haloswap::token::InstantiateMsg;
 
+    const MOCK_HALO_FACTORY_ADDR: &str = "halo_factory_addr";
+    const MOCK_HALO_PAIR_ADDR: &str = "halo_pair_addr";
+    const MOCK_HALO_ROUTER_ADDR: &str = "halo_router_addr";
     const MOCK_HALO_TOKEN_ADDR: &str = "halo_token_addr";
 
     const MOCK_OFFER_CW20_ADDR: &str = "cw20_addr";

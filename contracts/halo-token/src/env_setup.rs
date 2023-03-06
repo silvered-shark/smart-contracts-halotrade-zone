@@ -18,7 +18,7 @@ pub mod env_setup {
     };
 
     use halo_router::contract::{
-        execute as HaloRouterExecute, 
+        execute as HaloRouterExecute,  
         instantiate as HaloRouterInstantiate, 
         query as HaloRouterQuery
     };
@@ -29,9 +29,10 @@ pub mod env_setup {
         query as HaloTokenQuery
     };
 
-    use haloswap::token::InstantiateMsg as HaloTokenInstantiateMsg;
     use haloswap::factory::InstantiateMsg as HaloFactoryInstantiateMsg;
     use haloswap::pair::InstantiateMsg as HaloPairInstantiateMsg;
+    use haloswap::router::InstantiateMsg as HaloRouterInstantiateMsg;
+    use haloswap::token::InstantiateMsg as HaloTokenInstantiateMsg;
     use haloswap::asset::{AssetInfo, CreatePairRequirements};
     use halo_factory::state::read_pairs;
 
@@ -46,6 +47,10 @@ pub mod env_setup {
 
     pub const NATIVE_DENOM_2: &str = "uaura1";
     pub const NATIVE_BALANCE_2: u128 = 500_000_000_000u128;
+    
+    pub const HALO_TOKEN_SYMBOL: &str = "HALO";
+    pub const HALO_TOKEN_NAME: &str = "Halo Token";
+    pub const HALO_TOKEN_DECIMALS: u8 = 18;
 
     pub struct ContractInfo {
         pub contract_addr: String,
@@ -131,7 +136,7 @@ pub mod env_setup {
     pub fn instantiate_contracts() -> (App, Vec<ContractInfo>) {
         // Create a new app instance
         let mut app = mock_app();
-        // Create a vector to store all contract info
+        // Create a vector to store all contract info ([halo factory, halo pair, halo router, halo token])
         let mut contract_info_vec: Vec<ContractInfo> = Vec::new();
 
         // halo factory contract
@@ -139,7 +144,7 @@ pub mod env_setup {
         let halo_factory_contract_code_id = app.store_code(halo_factory_contract_template());
 
         // create instantiate message for contract
-        let contract_instantiate_msg = HaloFactoryInstantiateMsg {
+        let halo_factory_contract_instantiate_msg = HaloFactoryInstantiateMsg {
             pair_code_id: halo_factory_contract_code_id,
             token_code_id: halo_factory_contract_code_id,
         };
@@ -149,7 +154,7 @@ pub mod env_setup {
             .instantiate_contract(
                 halo_factory_contract_code_id,
                 Addr::unchecked(ADMIN),
-                &contract_instantiate_msg,
+                &halo_factory_contract_instantiate_msg,
                 &[],
                 "test instantiate contract",
                 None,
@@ -167,7 +172,7 @@ pub mod env_setup {
         let halo_pair_contract_code_id = app.store_code(halo_pair_contract_template());
 
         // create instantiate message for contract
-        let contract_instantiate_msg = HaloPairInstantiateMsg {
+        let halo_pair_contract_instantiate_msg = HaloPairInstantiateMsg {
             asset_infos: [
                 AssetInfo::NativeToken {
                     denom: "uusd".to_string(),
@@ -190,7 +195,7 @@ pub mod env_setup {
             .instantiate_contract(
                 halo_pair_contract_code_id,
                 Addr::unchecked(ADMIN),
-                &contract_instantiate_msg,
+                &halo_pair_contract_instantiate_msg,
                 &[],
                 "test instantiate contract",
                 None,
@@ -203,16 +208,40 @@ pub mod env_setup {
             contract_code_id: halo_pair_contract_code_id,
         });
 
+        // halo router contract
+        // store the code of all contracts to the app and get the code ids
+        let halo_router_contract_code_id = app.store_code(halo_router_contract_template());
 
+        // create instantiate message for contract
+
+        // instantiate contract
+        let halo_router_contract_addr = app
+            .instantiate_contract(
+                halo_router_contract_code_id,
+                Addr::unchecked(ADMIN),
+                &HaloRouterInstantiateMsg {
+                    halo_factory: halo_factory_contract_addr.to_string(),
+                },
+                &[],
+                "test instantiate contract",
+                None,
+            )
+            .unwrap();
+
+        // add contract info to the vector
+        contract_info_vec.push(ContractInfo {
+            contract_addr: halo_router_contract_addr.to_string(),
+            contract_code_id: halo_router_contract_code_id,
+        });
 
         // halo token contract
         // store the code of all contracts to the app and get the code ids
         let halo_token_contract_code_id = app.store_code(halo_token_contract_template());
 
         // create instantiate message for contract
-        let contract_instantiate_msg = HaloTokenInstantiateMsg {
-            name: "Halo Token".to_string(),
-            symbol: "HALO".to_string(),
+        let halo_token_contract_instantiate_msg = HaloTokenInstantiateMsg {
+            name: HALO_TOKEN_NAME.to_string(),
+            symbol: HALO_TOKEN_SYMBOL.to_string(),
             decimals: 6,
             initial_balances: vec![],
             mint: None,
@@ -223,7 +252,7 @@ pub mod env_setup {
             .instantiate_contract(
                 halo_token_contract_code_id,
                 Addr::unchecked(ADMIN),
-                &contract_instantiate_msg,
+                &halo_token_contract_instantiate_msg,
                 &[],
                 "test instantiate contract",
                 None,
@@ -249,48 +278,48 @@ pub mod env_setup {
 
         let too_short_token_name_instantiate_msg = HaloTokenInstantiateMsg {
             name: "H".to_string(),
-            symbol: "HALO".to_string(),
-            decimals: 18,
+            symbol: HALO_TOKEN_SYMBOL.to_string(),
+            decimals: HALO_TOKEN_DECIMALS,
             initial_balances: vec![],
             mint: None,
         };
 
         let too_long_token_name_instantiate_msg = HaloTokenInstantiateMsg {
             name: "0123456789a123456789b123456789c123456789d123456789e".to_string(), // 51 characters
-            symbol: "HALO".to_string(),
-            decimals: 18,
+            symbol: HALO_TOKEN_SYMBOL.to_string(),
+            decimals: HALO_TOKEN_DECIMALS,
             initial_balances: vec![],
             mint: None,
         };
 
         let too_short_token_symbol_instantiate_msg = HaloTokenInstantiateMsg {
-            name: "Halo Token".to_string(),
+            name: HALO_TOKEN_NAME.to_string(),
             symbol: "H".to_string(),
-            decimals: 18,
+            decimals: HALO_TOKEN_DECIMALS,
             initial_balances: vec![],
             mint: None,
         };
 
         let too_long_token_symbol_instantiate_msg = HaloTokenInstantiateMsg {
-            name: "Halo Token".to_string(),
+            name: HALO_TOKEN_NAME.to_string(),
             symbol: "0123456789a123456789b123456789c123456789d123456789e".to_string(), // 51 characters
-            decimals: 18,
+            decimals: HALO_TOKEN_DECIMALS,
             initial_balances: vec![],
             mint: None,
         };
 
         let too_big_token_decimals_instantiate_msg = HaloTokenInstantiateMsg {
-            name: "Halo Token".to_string(),
-            symbol: "HALO".to_string(),
+            name: HALO_TOKEN_NAME.to_string(),
+            symbol: HALO_TOKEN_SYMBOL.to_string(),
             decimals: 20,
             initial_balances: vec![],
             mint: None,
         };
 
         let initial_supply_greater_than_cap_msg = HaloTokenInstantiateMsg {
-            name: "Halo Token".to_string(),
-            symbol: "HALO".to_string(),
-            decimals: 18,
+            name: HALO_TOKEN_NAME.to_string(),
+            symbol: HALO_TOKEN_SYMBOL.to_string(),
+            decimals: HALO_TOKEN_DECIMALS,
             initial_balances: vec![Cw20Coin{
                 address: Addr::unchecked(ADMIN).to_string(),
                 amount: Uint128::new(100),
