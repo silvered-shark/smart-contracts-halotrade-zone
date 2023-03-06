@@ -1,4 +1,6 @@
 # The smart contracts for halotrade
+[![CircleCI](https://dl.circleci.com/status-badge/img/gh/halotrade-zone/smart-contracts/tree/main.svg?style=svg)](https://dl.circleci.com/status-badge/redirect/gh/halotrade-zone/smart-contracts/tree/main)
+[![codecov](https://codecov.io/gh/halotrade-zone/smart-contracts/branch/main/graph/badge.svg?token=ZIQKZ3B8C9)](https://codecov.io/gh/halotrade-zone/smart-contracts)
 The automated market-maker on [Aura](https://aura.network/) network.
 
 ## Contracts
