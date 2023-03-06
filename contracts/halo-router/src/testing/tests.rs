@@ -8,7 +8,7 @@ use crate::operations::asset_into_swap_msg;
 use haloswap::mock_querier::mock_dependencies;
 
 use cw20::{Cw20ExecuteMsg, Cw20ReceiveMsg};
-use haloswap::asset::{Asset, AssetInfo, PairInfo, CreatePairRequirements};
+use haloswap::asset::{Asset, AssetInfo, CreatePairRequirements, PairInfo};
 use haloswap::pair::Cw20HookMsg as PairHookMsg;
 use haloswap::router::{
     ConfigResponse, Cw20HookMsg, ExecuteMsg, InstantiateMsg, QueryMsg,

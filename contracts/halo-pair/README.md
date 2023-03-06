@@ -1,84 +1,108 @@
-# halo-pair
-## Introduction
+# The pair contract for Haloswap
+Each contract contains a pair of assets. When users provide these assets to the contract, they will receive the Liquidity Provider (LP) Token.
 
-This is a CosmWasm smart contract for creating a pair of CW20 tokens on the AURA blockchain. This contract allows you to create and manage two CW20 tokens that can be traded against each other on a decentralized exchange (DEX) platform.
-
-## Getting Started
-
-### Prerequisites
-
-- [Rust](https://www.rust-lang.org/tools/install)
-- [Cosmos SDK](https://docs.cosmos.network/master/run-node/)
-- [CosmWasm](https://docs.cosmwasm.com/0.16/getting-started/installation.html)
-
-### Installing
-
-- Clone the repository from: [Halo-swap repo](https://github.com/aura-nw/halo-swap)
-
-```bash
-git clone https://github.com/aura-nw/halo-swap.git
+## InstantiateMsg
+```javascript
+{
+    "asset_infos": [
+        {
+            "token": {
+                "contract_addr": "aura..."
+            }
+        },
+        {
+            "native_token": {
+                "denom": "uaura"
+            }
+        }
+    ],
+    "token_code_id": 123,
+    "asset_decimals": [ 6, 6 ],
+    "requirements": {
+        "whitelist": [
+            "aura...",
+            "aura..."
+        ],
+        "first_asset_minimum": 10000,
+        "second_asset_minimum": 20000
+    },
+}
 ```
 
-- Beaker tools:
+## ExecuteMsg
 
-```bash
-cargo install -f beaker # `-f` flag for up-to-date version
+### ProvideLiquidity
+```javascript
+    "provide_liquidity" {
+        "assets": [
+            {
+                "info": {
+                    "token": {
+                        "contract_addr": "aura...",
+                    }
+                },
+                "amount": 10000000000,
+            },
+            {
+                "info": {
+                    "native_token": {
+                        "denom": "uaura"
+                    }
+                },
+                "amount": 500000000,
+            }
+        ],
+        "slippage_tolerance": 5,
+        "receiver": "aura...",
+    },
 ```
 
-### Build the contract
-
-1. Build .wasm file stored in `target/wasm32-unknown-unknown/release/<CONTRACT_NAME>.wasm`
-`--no-wasm-opt` is suitable for development, explained below
-
-```bash
-beaker wasm build --no-wasm-opt
+## QueryMsg
+### Pair
+```javascript
+{
+    "pair": {}
+}
 ```
-
-### Deployment
-
-1. Update Beaker.toml file
-
-```bash
-name = "halo-swap"
-gas_price = '0.025uaura'
-gas_adjustment = 1.3
-account_prefix = 'aura'
-derivation_path = '''m/44'/118'/0'/0/0'''
-
-[networks.serenity]
-chain_id = 'serenity-testnet-001'
-network_variant = 'Shared'
-grpc_endpoint = 'https://grpc.serenity.aura.network:9092'
-rpc_endpoint = 'https://rpc.serenity.aura.network'
-
-[accounts.signer]
-mnemonic = 'around cushion believe vicious member trophy grit disease diagram nice only post nut beef mosquito thumb huge pelican disorder orchard response left phrase degree'
-
-[wasm]
-contract_dir = 'contracts'
-optimizer_version = '0.12.9'
+#[returns(PairInfo)]
+### Pool
+```javascript
+{
+    "pool": {}
+}
 ```
+#[returns(PoolResponse)]
 
-2. Store code on chain
-
-Read .wasm in `target/wasm32-unknown-unknown/release/<CONTRACT_NAME>.wasm` due to `--no-wasm-opt` flag
-use `--signer-account test1` which is predefined.
-The list of all predefined accounts are here: https://github.com/osmosis-labs/LocalOsmosis#accounts
-code-id` is stored in the beaker state, local by default
-
-```bash
-beaker wasm store-code halo-pair --signer-account signer --no-wasm-opt --network serenity
+### Simulation
+```javascript
+{
+    "simulation": { 
+        "offer_asset": {
+            "info": {
+                "token": {
+                    "contract_addr": "aura...",
+                }
+            }
+            "amount": 10000000000,
+        }
+    }
+}
 ```
+#[returns(SimulationResponse)]
 
-The result should be like this:
-    
-    ```bash
-      Code stored successfully!! 🎉
-    +
-    ├── code_id: 1077
-    └── instantiate_permission: –
-    ```
-
-3. Instantiate the contract
-
-    ```
+### ReverseSimulation
+```javascript
+{
+    "reverseSimulation": {
+        "ask_asset": {
+            "info": {
+                "native_token": {
+                    "denom": "uaura"
+                }
+            },
+            "amount": 500000000,
+        }
+    }
+}
+```
+#[returns(ReverseSimulationResponse)]

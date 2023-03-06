@@ -7,10 +7,10 @@ use cosmwasm_std::testing::{
     mock_dependencies_with_balance, mock_env, mock_info, MockApi, MockStorage, MOCK_CONTRACT_ADDR,
 };
 use cosmwasm_std::{
-    attr, coin, from_binary, to_binary, CosmosMsg, OwnedDeps, Reply, ReplyOn, Response, StdError,
-    SubMsg, SubMsgResponse, SubMsgResult, Uint128, WasmMsg, Addr,
+    attr, coin, from_binary, to_binary, Addr, CosmosMsg, OwnedDeps, Reply, ReplyOn, Response,
+    StdError, SubMsg, SubMsgResponse, SubMsgResult, Uint128, WasmMsg,
 };
-use haloswap::asset::{AssetInfo, PairInfo, CreatePairRequirements};
+use haloswap::asset::{AssetInfo, CreatePairRequirements, PairInfo};
 use haloswap::factory::{
     ConfigResponse, ExecuteMsg, InstantiateMsg, NativeTokenDecimalsResponse, QueryMsg,
 };
@@ -300,7 +300,10 @@ fn fail_to_create_same_pair() {
         second_asset_minimum: Uint128::zero(),
     };
 
-    let msg = ExecuteMsg::CreatePair { asset_infos, requirements };
+    let msg = ExecuteMsg::CreatePair {
+        asset_infos,
+        requirements,
+    };
 
     let env = mock_env();
     let info = mock_info("addr0000", &[]);
@@ -327,7 +330,10 @@ fn fail_to_create_pair_with_unactive_denoms() {
         second_asset_minimum: Uint128::zero(),
     };
 
-    let msg = ExecuteMsg::CreatePair { asset_infos, requirements };
+    let msg = ExecuteMsg::CreatePair {
+        asset_infos,
+        requirements,
+    };
 
     let env = mock_env();
     let info = mock_info("addr0000", &[]);
@@ -354,7 +360,10 @@ fn fail_to_create_pair_with_invalid_denom() {
         second_asset_minimum: Uint128::zero(),
     };
 
-    let msg = ExecuteMsg::CreatePair { asset_infos, requirements };
+    let msg = ExecuteMsg::CreatePair {
+        asset_infos,
+        requirements,
+    };
 
     let env = mock_env();
     let info = mock_info("addr0000", &[]);
@@ -391,7 +400,10 @@ fn fail_to_create_pair_with_unknown_token() {
         second_asset_minimum: Uint128::zero(),
     };
 
-    let msg = ExecuteMsg::CreatePair { asset_infos, requirements };
+    let msg = ExecuteMsg::CreatePair {
+        asset_infos,
+        requirements,
+    };
 
     let env = mock_env();
     let info = mock_info("addr0000", &[]);
@@ -428,7 +440,10 @@ fn fail_to_create_pair_with_unknown_ibc_token() {
         second_asset_minimum: Uint128::zero(),
     };
 
-    let msg = ExecuteMsg::CreatePair { asset_infos, requirements };
+    let msg = ExecuteMsg::CreatePair {
+        asset_infos,
+        requirements,
+    };
 
     let env = mock_env();
     let info = mock_info("addr0000", &[]);
