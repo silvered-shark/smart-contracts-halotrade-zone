@@ -1,4 +1,17 @@
 name = "halo-swap"
+gas_price = '0.025uaura'
+gas_adjustment = 1.3
+account_prefix = 'aura'
+derivation_path = '''m/44'/118'/0'/0/0'''
+
+[networks.serenity]
+chain_id = 'serenity-testnet-001'
+network_variant = 'Shared'
+grpc_endpoint = 'https://grpc.serenity.aura.network:9092'
+rpc_endpoint = 'https://rpc.serenity.aura.network'
+
+[accounts.signer]
+mnemonic = 'around cushion believe vicious member trophy grit disease diagram nice only post nut beef mosquito thumb huge pelican disorder orchard response left phrase degree'
 
 [wasm]
 contract_dir = 'contracts'

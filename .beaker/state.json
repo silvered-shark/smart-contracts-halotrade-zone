@@ -1,1 +1,27 @@
-{}
+{
+  "serenity": {
+    "halo-factory": {
+      "code_id": 1049,
+      "addresses": {},
+      "proposal": {
+        "store_code": null
+      }
+    },
+    "halo-token": {
+      "code_id": 1050,
+      "addresses": {
+        "default": "aura1k3tstzjz0na2ffwpz3edzky0dsvvm72xdwvu5sjueu286q8uqzcqcz0cyy"
+      },
+      "proposal": {
+        "store_code": null
+      }
+    },
+    "halo-pair": {
+      "code_id": 1077,
+      "addresses": {},
+      "proposal": {
+        "store_code": null
+      }
+    }
+  }
+}
